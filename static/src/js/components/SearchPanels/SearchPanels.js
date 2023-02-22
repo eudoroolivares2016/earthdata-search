@@ -313,6 +313,7 @@ class SearchPanels extends PureComponent {
         onClick: () => setCollectionSort('-usage_score')
       },
       {
+        // Sorts collection by fuzzy collection end-date in relation to ongoing-days configured
         label: 'End Date',
         isActive: activeCollectionsSortKey === '-ongoing',
         onClick: () => setCollectionSort('-ongoing')
