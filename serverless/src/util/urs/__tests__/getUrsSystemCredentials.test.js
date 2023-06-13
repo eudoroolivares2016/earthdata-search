@@ -1,20 +1,26 @@
-import AWS from 'aws-sdk'
+import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 
 import { getUrsSystemCredentials } from '../getUrsSystemCredentials'
 
+jest.mock('@aws-sdk/client-secrets-manager', () => {
+  const original = jest.requireActual('@aws-sdk/client-secrets-manager')
+  const sendMock = jest.fn().mockReturnValueOnce({
+    SecretString: '{"username":"test", "password":"password"}'
+  })
+
+  return {
+    ...original,
+    SecretsManagerClient: jest.fn().mockImplementation(() => ({
+      send: sendMock
+    }))
+  }
+})
+
+const client = new SecretsManagerClient()
+
 describe('getUrsSystemCredentials', () => {
+  // TODO: why did we end up not needing the "input outer obj"
   test('fetches urs credentials from secrets manager', async () => {
-    const secretsManagerData = jest.fn().mockReturnValue({
-      promise: jest.fn().mockResolvedValue({
-        SecretString: '{"username":"test","password":"password"}'
-      })
-    })
-
-    AWS.SecretsManager = jest.fn()
-      .mockImplementationOnce(() => ({
-        getSecretValue: secretsManagerData
-      }))
-
     const response = await getUrsSystemCredentials('prod')
 
     expect(response).toEqual({
@@ -22,9 +28,9 @@ describe('getUrsSystemCredentials', () => {
       password: 'password'
     })
 
-    expect(secretsManagerData).toBeCalledTimes(1)
-    expect(secretsManagerData.mock.calls[0]).toEqual([{
-      SecretId: 'UrsSystemPasswordSecret_prod'
-    }])
+    expect(client.send).toBeCalledTimes(1)
+    expect(client.send).toHaveBeenCalledWith(
+      { SecretId: 'UrsSystemPasswordSecret_prod' }
+    )
   })
 })

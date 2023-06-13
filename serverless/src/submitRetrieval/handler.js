@@ -1,5 +1,6 @@
 import 'array-foreach-async'
 import AWS from 'aws-sdk'
+import { SQSClient, SendMessageBatchCommand } from "@aws-sdk/client-sqs"; // ES Modules import
 import snakecaseKeys from 'snakecase-keys'
 
 import { getDbConnection } from '../util/database/getDbConnection'

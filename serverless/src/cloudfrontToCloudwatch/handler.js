@@ -3,14 +3,14 @@ import zlib from 'zlib'
 
 import 'array-foreach-async'
 
-import AWS from 'aws-sdk'
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
 import { parseError } from '../../../sharedUtils/parseError'
 
 // Promisify node method
 const gunzip = util.promisify(zlib.gunzip)
 
-let s3
+// let s3
 
 /**
  * Process provided Cloudwatch logs triggered by S3
@@ -23,7 +23,7 @@ const cloudfrontToCloudwatch = async (event) => {
 
   console.log(`Processing ${s3Records.length} files(s)`)
 
-  s3 = new AWS.S3()
+  const s3Client = new S3Client()
 
   await s3Records.forEachAsync(async (record) => {
     const { s3: s3Record } = record
@@ -34,16 +34,21 @@ const cloudfrontToCloudwatch = async (event) => {
 
     try {
       // Fetch the object from S3
-      const s3Object = await s3.getObject({
+      const s3Object = new GetObjectCommand({
         Bucket: bucketName,
         Key: objectKey
-      }).promise()
+      })
+
+      const s3Response = await s3Client.send(s3Object)
+
+      // console.log('🚀 ~ file: handler.js:41 ~ awaits3Records.forEachAsync ~ s3Object:', s3Object)
 
       // Extract the body of the object
-      const { Body: s3ObjectBody } = s3Object
+      const { Body: s3ObjectBody } = s3Response
 
       // Unzip the log file
       const s3ObjectUnzipped = await gunzip(s3ObjectBody)
+      // console.log('🚀 ~ file: handler.js:52 ~ awaits3Records.forEachAsync ~ s3ObjectUnzipped:', s3ObjectUnzipped)
 
       // Split the file into individual logs
       const fileLines = s3ObjectUnzipped.toString().split('\n')

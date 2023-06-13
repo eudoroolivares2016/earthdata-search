@@ -1,15 +1,22 @@
-import AWS from 'aws-sdk'
+import { SFNClient } from '@aws-sdk/client-sfn'
 
 import { startOrderStatusUpdateWorkflow } from '../startOrderStatusUpdateWorkflow'
 
-const stepFunctionData = jest.fn().mockReturnValue({
-  promise: jest.fn().mockResolvedValue()
-})
+jest.mock('@aws-sdk/client-sfn', () => {
+  const original = jest.requireActual('@aws-sdk/client-sfn')
+  const stepFunctionData = jest.fn()
 
-AWS.StepFunctions = jest.fn()
-  .mockImplementationOnce(() => ({
-    startExecution: stepFunctionData
-  }))
+  return {
+    ...original,
+    SFNClient: jest.fn().mockImplementation(() => ({
+      startExecution: stepFunctionData
+        .mockResolvedValue(stepFunctionData)
+    }))
+  }
+})
+// TODO: Not sure if this variable name is confusing but, it was there before
+const client = new SFNClient()
+console.log('🚀 ~ file: startOrderStatusUpdateWorkflow.test.js:19 ~ stepFunctionData:', client)
 
 const OLD_ENV = process.env
 
@@ -33,14 +40,19 @@ describe('startOrderStatusUpdateWorkflow', () => {
 
     await startOrderStatusUpdateWorkflow(1, 'access-token', 'ESI')
 
-    expect(stepFunctionData).toBeCalledTimes(1)
-    expect(stepFunctionData.mock.calls[0]).toEqual([{
-      stateMachineArn: 'order-status-arn',
-      input: JSON.stringify({
-        id: 1,
-        accessToken: 'access-token',
-        orderType: 'ESI'
-      })
-    }])
+    expect(client.startExecution).toBeCalledTimes(1)
+
+    // TODO: Why does this no longer have a [] around it?
+    expect(client.startExecution).toHaveBeenCalledWith(
+      {
+        stateMachineArn: 'order-status-arn',
+        input: JSON.stringify({
+          id: 1,
+          accessToken: 'access-token',
+          orderType: 'ESI'
+        })
+      }
+    )
   })
+  console.log('🚀 ~ file: startOrderStatusUpdateWorkflow.test.js:67 ~ test ~ stepFunctionData.startExecution:', client.startExecution)
 })

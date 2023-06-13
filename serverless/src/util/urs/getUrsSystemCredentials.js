@@ -1,5 +1,4 @@
-import AWS from 'aws-sdk'
-
+import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { getSecretEarthdataConfig } from '../../../../sharedUtils/config'
 import { getSecretsManagerConfig } from '../aws/getSecretsManagerConfig'
 
@@ -13,7 +12,7 @@ let ursSystemCredentials
 export const getUrsSystemCredentials = async (earthdataEnvironment) => {
   if (ursSystemCredentials == null) {
     if (secretsmanager == null) {
-      secretsmanager = new AWS.SecretsManager(getSecretsManagerConfig())
+      secretsmanager = new SecretsManagerClient(getSecretsManagerConfig())
     }
 
     if (process.env.NODE_ENV === 'development') {
@@ -34,7 +33,7 @@ export const getUrsSystemCredentials = async (earthdataEnvironment) => {
     }
 
     // If not running in development mode fetch secrets from AWS
-    const secretValue = await secretsmanager.getSecretValue(params).promise()
+    const secretValue = await secretsmanager.send(params)
 
     ursSystemCredentials = JSON.parse(secretValue.SecretString)
   }

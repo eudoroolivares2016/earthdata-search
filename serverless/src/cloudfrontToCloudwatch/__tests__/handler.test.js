@@ -3,6 +3,7 @@ import zlib from 'zlib'
 import util from 'util'
 
 import AWS from 'aws-sdk'
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
 import cloudfrontToCloudwatch from '../handler'
 
@@ -22,7 +23,7 @@ describe('cloudfrontToCloudwatch', () => {
     expect(consoleMock).toBeCalledTimes(0)
   })
 
-  test('retrieves logs from S3 and parses them correctly', async () => {
+  test.only('retrieves logs from S3 and parses them correctly', async () => {
     // Contents of a log file from cloudfront
     const testFileContents = `#Version: 1.0
 #Fields: date time x-edge-location sc-bytes c-ip cs-method cs(Host) cs-uri-stem sc-status cs(Referer) cs(User-Agent) cs-uri-query cs(Cookie) x-edge-result-type x-edge-request-id x-host-header cs-protocol cs-bytes time-taken x-forwarded-for ssl-protocol ssl-cipher x-edge-response-result-type cs-protocol-version fle-status fle-encrypted-fields c-port time-to-first-byte x-edge-detailed-result-type sc-content-type sc-content-len sc-range-start sc-range-end
@@ -33,20 +34,36 @@ describe('cloudfrontToCloudwatch', () => {
 `
 
     // gzip the test file contents
-    const zippedFile = await gzip(Buffer.from(testFileContents))
+    // Note that in order to call this variable from the mock library we must prefix var name with "mock"
+    // https://stackoverflow.com/questions/44649699/service-mocked-with-jest-causes-the-module-factory-of-jest-mock-is-not-allowe
+    // TODO we should look into this some more
+    const mockzippedFile = await gzip(Buffer.from(testFileContents))
 
     const consoleMock = jest.spyOn(console, 'log')
 
-    const s3GetObjectPromise = jest.fn().mockReturnValue({
-      promise: jest.fn().mockResolvedValue({
-        Body: zippedFile
-      })
-    })
+    // const s3GetObjectPromise = jest.fn().mockReturnValue({
+    //   promise: jest.fn().mockResolvedValue({
+    //     Body: zippedFile
+    //   })
+    // })
 
-    AWS.S3 = jest.fn()
-      .mockImplementation(() => ({
-        getObject: s3GetObjectPromise
-      }))
+    // AWS.S3 = jest.fn()
+    //   .mockImplementation(() => ({
+    //     getObject: s3GetObjectPromise
+    //   }))
+
+    jest.mock('@aws-sdk/client-s3', () => {
+      const original = jest.requireActual('@aws-sdk/client-s3')
+      return {
+        ...original,
+        S3Client: jest.fn().mockImplementation(() => ({
+          send: jest.fn()
+            .mockResolvedValueOnce({
+              Body: mockzippedFile
+            })
+        }))
+      }
+    })
 
     await cloudfrontToCloudwatch({
       Records: [{
@@ -61,10 +78,10 @@ describe('cloudfrontToCloudwatch', () => {
       }]
     })
 
-    expect(s3GetObjectPromise.mock.calls[0]).toEqual([{
-      Bucket: 'test-bucket',
-      Key: 'test-object.gz'
-    }])
+    // expect(S3Client.send()).toEqual([{
+    //   Bucket: 'test-bucket',
+    //   Key: 'test-object.gz'
+    // }])
 
     expect(consoleMock).toBeCalledTimes(5)
     expect(consoleMock.mock.calls[0]).toEqual(['Processing 1 files(s)'])

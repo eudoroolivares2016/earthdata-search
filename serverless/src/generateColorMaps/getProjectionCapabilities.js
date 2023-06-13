@@ -28,7 +28,7 @@ let sqs
 export const getProjectionCapabilities = async (projection) => {
   const capabilitiesUrl = `https://gibs.earthdata.nasa.gov/wmts/${projection}/best/wmts.cgi?SERVICE=WMTS&request=GetCapabilities`
 
-  console.log(`GIBS Capabilties URL: ${capabilitiesUrl}`)
+  console.log(`GIBS Capabilities URL: ${capabilitiesUrl}`)
 
   try {
     if (sqs == null) {
@@ -38,7 +38,7 @@ export const getProjectionCapabilities = async (projection) => {
     // Retrieve a connection to the database
     const dbConnection = await getDbConnection()
 
-    // Delete colormaps that havent been updated in the last 5 days
+    // Delete colormaps that haven't been updated in the last 5 days
     await dbConnection(colorMapsTableName).whereRaw("updated_at <= now() - INTERVAL '5 DAYS'").del()
 
     const colormapProducts = []
