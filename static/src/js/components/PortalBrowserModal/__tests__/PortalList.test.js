@@ -84,8 +84,9 @@ describe('PortalList component', () => {
         search: '?portal=standardproducts'
       }))
     })
-
-    expect(props.onModalClose).toHaveBeenCalledTimes(1)
+    await waitFor(async () => {
+      expect(props.onModalClose).toHaveBeenCalledTimes(1)
+    })
   })
 
   test('clicking on the `More Info` does not open the portal', async () => {
@@ -101,7 +102,9 @@ describe('PortalList component', () => {
         pathname: '/search'
       }))
 
-      expect(props.onModalClose).toHaveBeenCalledTimes(0)
+      await waitFor(async () => {
+        expect(props.onModalClose).toHaveBeenCalledTimes(0)
+      })
     })
   })
 

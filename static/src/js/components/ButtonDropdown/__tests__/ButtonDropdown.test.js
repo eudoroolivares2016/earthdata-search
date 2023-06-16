@@ -40,9 +40,11 @@ describe('ButtonDropdown component', () => {
   })
 
   describe('icon', () => {
-    test('displays correctly by default', () => {
+    test('displays correctly by default', async () => {
       setup()
-      expect(screen.getByTestId('dropdown-closed')).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByTestId('dropdown-closed')).toBeInTheDocument()
+      })
     })
 
     test('displays correctly when opened', async () => {
