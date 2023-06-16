@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
@@ -22,17 +22,21 @@ const setup = () => {
 }
 
 describe('ButtonDropdown component', () => {
-  test('should render self', () => {
+  test('should render self', async () => {
     setup()
-    expect(screen.getByRole('button', { name: /test label/i })).toBeInTheDocument()
-    expect(screen.queryByText('Button Text')).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /test label/i })).toBeInTheDocument()
+      expect(screen.queryByText('Button Text')).not.toBeInTheDocument()
+    })
   })
 
   test('update display when dropdown is opened', async () => {
     setup()
     const user = userEvent.setup()
     await user.click(screen.getByRole('button'))
-    expect(screen.getByText('Button Text')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText('Button Text')).toBeInTheDocument()
+    })
   })
 
   describe('icon', () => {
@@ -45,7 +49,9 @@ describe('ButtonDropdown component', () => {
       setup()
       const user = userEvent.setup()
       await user.click(screen.getByRole('button'))
-      expect(screen.getByTestId('dropdown-open')).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByTestId('dropdown-open')).toBeInTheDocument()
+      })
     })
   })
 })
