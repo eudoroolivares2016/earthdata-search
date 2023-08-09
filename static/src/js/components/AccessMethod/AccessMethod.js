@@ -178,6 +178,7 @@ export class AccessMethod extends Component {
       let subtitle = null
       let description = null
       let details = null
+      let serviceName = null
 
       switch (type) {
         case 'download': {
@@ -221,7 +222,7 @@ export class AccessMethod extends Component {
           subtitle = 'Harmony'
           description = 'Select options like variables, transformations, and output formats for in-region cloud access.'
           details = 'The requested data will be processed using the Harmony service and stored in the cloud for analysis.'
-
+          serviceName = name
           break
         }
         default:
@@ -236,7 +237,7 @@ export class AccessMethod extends Component {
             value={methodKey}
             title={title}
             subtitle={subtitle}
-            serviceName={name}
+            serviceName={serviceName}
             description={description}
             details={details}
           />
