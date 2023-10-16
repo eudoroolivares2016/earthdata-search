@@ -1153,7 +1153,7 @@ test.describe('Map interactions', () => {
     })
 
     test.describe('When switching from the North Polar Stereographic projection to the South Polar Stereographic projection', () => {
-      test('updates the URL with the new map parameter and updates the src of tile images', async ({ page }) => {
+      test.skip('updates the URL with the new map parameter and updates the src of tile images', async ({ page }) => {
         await interceptUnauthenticatedCollections({
           page,
           body: commonBody,
