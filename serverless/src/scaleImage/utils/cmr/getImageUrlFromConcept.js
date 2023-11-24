@@ -13,16 +13,19 @@ export const getImageUrlFromConcept = async (
   conceptId,
   conceptType,
   cascadeConcepts,
-  echoToken
+  imageSrc,
+  systemToken
 ) => {
   console.log('🚀 ~ file: getImageUrlFromConcept.js:18 ~ conceptId:', conceptId)
   // Retrieve the metadata for the provided concept id and type
-  const conceptMetadata = await fetchCmrConcept(conceptId, echoToken)
+  const conceptMetadata = await fetchCmrConcept(conceptId, systemToken)
   // Console.log('🚀 ~ file: getImageUrlFromConcept.js:21 ~ conceptMetadata:', conceptMetadata)
 
   if (conceptType === 'granules') {
+    console.log('🚀 ~ file: getImageUrlFromConcept.js:19 ~ imageSrc:', imageSrc)
     // No need to use `await` because we're returning the statement
-    return getBrowseImageUrlFromConcept(conceptMetadata)
+    // if the imgSrc was included in the request then we should search for that one
+    if (imageSrc) { return imageSrc || getBrowseImageUrlFromConcept(conceptMetadata) }
   }
 
   // TODO are we still going to support things called datasets?
@@ -34,7 +37,7 @@ export const getImageUrlFromConcept = async (
     // If no browse image was found in the collection metadata and the user wants to fallback to granule metadata
     if (collectionBrowseImage == null && cascadeConcepts === 'true') {
       console.log('🚀 ~ file: getImageUrlFromConcept.js:36 ~ cascadeConcepts:', cascadeConcepts)
-      const collectionGranuleMetadata = await fetchCmrCollectionGranules(conceptId, echoToken)
+      const collectionGranuleMetadata = await fetchCmrCollectionGranules(conceptId, systemToken)
       console.log('🚀 ~ file: getImageUrlFromConcept.js:38 ~ collectionGranuleMetadata:', collectionGranuleMetadata)
       // TODO this is where we may need to select to fulfill all the browse-scaler functionality
       // TODO: Break from this loop as soon as an image url is found

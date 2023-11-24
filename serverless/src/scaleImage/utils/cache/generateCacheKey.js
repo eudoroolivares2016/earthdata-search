@@ -11,7 +11,7 @@
   * @param {ImageDimension} dimensions The dimensions of the image to generate the key for
   * @returns {String} Key to be used to store an item in cache.
   */
-export const generateCacheKey = (conceptId, conceptType, dimensions = {}) => {
+export const generateCacheKey = (conceptId, conceptType, imageSrc, dimensions = {}) => {
   const {
     height = 'h',
     width = 'w'
@@ -21,6 +21,7 @@ export const generateCacheKey = (conceptId, conceptType, dimensions = {}) => {
     conceptId,
     conceptType,
     height,
+    imageSrc,
     width
   ].filter(Boolean)
 

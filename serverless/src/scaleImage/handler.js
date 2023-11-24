@@ -72,19 +72,22 @@ const scaleImage = async (event, context) => {
   // Default the queryStringParameters because when none are provided the key is missing
   // todo default the height and the weight
   const { height: defaultHeight, width: defaultWidth } = getApplicationConfig().thumbnailSize
-
+  // Todo lets just make all the arguments camel case so we don't have to convert them
   const {
     cascade_concepts: cascadeConcepts = 'true',
     h: height = defaultHeight,
     w: width = defaultWidth,
-    return_default: returnDefault = 'true'
+    return_default: returnDefault = 'true',
+    imageSrc
   } = queryStringParameters || {}
-
+  console.log('🚀 ~ file: handler.js:83 ~ scaleImage ~ imageSrc:', imageSrc)
+  // TODO arrayBuffer nad buffer are not the same thing
   // Initialize the thumbnail to an empty array buffer to support `return_default` being set to false
   let thumbnail = Buffer.from('')
 
   try {
-    const cacheKey = generateCacheKey(conceptId, conceptType, {
+    // Optional imageSrc that gets passed when a granule image from one of many is specified
+    const cacheKey = generateCacheKey(conceptId, conceptType, imageSrc, {
       height,
       width
     })
@@ -111,6 +114,7 @@ const scaleImage = async (event, context) => {
         conceptId,
         conceptType,
         cascadeConcepts,
+        imageSrc,
         systemToken
       )
       console.log('🚀 ~ file: handler.js:112 ~ scaleImage ~ imageUrl:', imageUrl)
