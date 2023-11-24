@@ -71,10 +71,12 @@ const scaleImage = async (event, context) => {
 
   // Default the queryStringParameters because when none are provided the key is missing
   // todo default the height and the weight
+  const { height: defaultHeight, width: defaultWidth } = getApplicationConfig().thumbnailSize
+
   const {
     cascade_concepts: cascadeConcepts = 'true',
-    h: height = getApplicationConfig().thumbnailSize.height,
-    w: width = getApplicationConfig().thumbnailSize.width,
+    h: height = defaultHeight,
+    w: width = defaultWidth,
     return_default: returnDefault = 'true'
   } = queryStringParameters || {}
 

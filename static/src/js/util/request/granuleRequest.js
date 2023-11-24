@@ -63,12 +63,13 @@ export default class GranuleRequest extends CmrRequest {
       if (formattedTemporal.filter(Boolean).length > 0) {
         updatedGranule.formatted_temporal = formattedTemporal
       }
-
-      const { thumbnailSize } = getApplicationConfig()
-      const { height, width } = thumbnailSize
+      // We can retrieve the default from EDSC itself on the lambda side to simplify the requests
+      // const { thumbnailSize } = getApplicationConfig()
+      // const { height, width } = thumbnailSize
 
       if (id) {
-        updatedGranule.thumbnail = `${getEarthdataConfig(this.earthdataEnvironment).cmrHost}/browse-scaler/browse_images/granules/${id}?h=${height}&w=${width}`
+        updatedGranule.thumbnail = `${getEnvironmentConfig().apiHost}/scale/granules/${id}`
+        // updatedGranule.thumbnail = `${getEarthdataConfig(this.earthdataEnvironment).cmrHost}/browse-scaler/browse_images/granules/${id}?h=${height}&w=${width}`
       }
 
       if (links && links.length > 0) {
