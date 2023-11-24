@@ -30,7 +30,7 @@ export const resizeImage = async (image, height, width) => {
       .toBuffer()
   } catch (e) {
     console.log(`Failed to resize image: ${e.toString()}`)
-
+    // Todo update error throw style
     throw e
   }
 }

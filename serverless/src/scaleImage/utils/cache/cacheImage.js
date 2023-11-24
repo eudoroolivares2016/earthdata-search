@@ -11,8 +11,6 @@ export const cacheImage = async (key, image) => {
   // Ignore empty cache attempts
   if (image) {
     const cacheConnection = await getCacheConnection()
-    console.log('🚀 ~ file: cacheImage.js:14 ~ cacheImage ~ cacheConnection:', cacheConnection)
-
     /**
      * Caching methods
      * EX      -- Set the specified expire time, in seconds.

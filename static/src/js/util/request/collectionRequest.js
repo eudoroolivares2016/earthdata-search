@@ -1,9 +1,5 @@
 import CmrRequest from './cmrRequest'
-import {
-  getApplicationConfig,
-  getEarthdataConfig,
-  getEnvironmentConfig
-} from '../../../../../sharedUtils/config'
+import { getEarthdataConfig, getEnvironmentConfig } from '../../../../../sharedUtils/config'
 
 import { collectionRequestPermittedCmrKeys } from '../../../../../sharedConstants/permittedCmrKeys'
 import {
@@ -13,7 +9,7 @@ import {
 import { hasTag } from '../../../../../sharedUtils/tags'
 import { isCSDACollection } from '../isCSDACollection'
 import { getOpenSearchOsddLink } from '../../../../../sharedUtils/getOpenSearchOsddLink'
-
+// Import ScaleImageRequest from './scaleImageRequest'
 import unavailableImg from '../../../assets/images/image-unavailable.svg'
 
 /**
@@ -77,6 +73,7 @@ export default class CollectionRequest extends CmrRequest {
       ({ entry = [] } = feed)
     }
 
+    // Iterate over the collections
     entry.map((collection) => {
       const transformedCollection = collection
 
@@ -98,12 +95,29 @@ export default class CollectionRequest extends CmrRequest {
         transformedCollection.isCSDA = isCSDACollection(collection.organizations)
       }
 
-      const h = getApplicationConfig().thumbnailSize.height
-      const w = getApplicationConfig().thumbnailSize.width
-
+      // Const h = getApplicationConfig().thumbnailSize.height
+      // const w = getApplicationConfig().thumbnailSize.width
+      // Todo hit localLambda function
+      // todo why would there not be an id on the collection?
       if (collection.id) {
+        // Const scaleImageRequest = new ScaleImageRequest()
+        // const scaledImage = await scaleImageRequest.getScaledImage('collections', collection.id)
+        // console.log('🚀 ~ file: collectionRequest.js:108 ~ CollectionRequest ~ entry.map ~ scaledImage:', scaledImage)
+        // transformedCollection.thumbnail = scaledImage
+        // TODO remove debugging conditional
+        // if (collection.browse_flag) {
+        //   console.log('Getting in there')
+        //   // Const browseScalerResult = `${getEarthdataConfig(this.earthdataEnvironment).apiHost}/browse-scaler/browse_images/datasets/${collection.id}?h=${h}&w=${w}`
+        //   console.log('🚀 ~ file: collectionRequest.js:113 ~ CollectionRequest ~ entry.map ~ getEarthdataConfig(this.earthdataEnvironment).apiHost:', getEnvironmentConfig().apiHost)
+        //   const scaledImageResult = `${getEnvironmentConfig().apiHost}/scale/collections/${collection.id}`
+
+        //   transformedCollection.thumbnail = scaledImageResult
+        // } else {
+        //   transformedCollection.thumbnail = unavailableImg
+        // }
+
         transformedCollection.thumbnail = collection.browse_flag
-          ? `${getEarthdataConfig(this.earthdataEnvironment).cmrHost}/browse-scaler/browse_images/datasets/${collection.id}?h=${h}&w=${w}`
+          ? `${getEnvironmentConfig().apiHost}/scale/collections/${collection.id}`
           : unavailableImg
       }
 

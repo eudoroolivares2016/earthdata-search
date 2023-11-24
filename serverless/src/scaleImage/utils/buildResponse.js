@@ -7,7 +7,6 @@
 export const buildResponse = (imageBuffer, statusCode = 200) => {
   const base64Image = imageBuffer.toString('base64')
 
-  // Todo I think this is 'body': base64.b64encode(image).decode('utf-8'), base 64 encoded somewhere
   return {
     isBase64Encoded: true,
     statusCode,

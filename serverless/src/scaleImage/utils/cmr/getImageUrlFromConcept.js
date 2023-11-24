@@ -18,7 +18,7 @@ export const getImageUrlFromConcept = async (
   console.log('🚀 ~ file: getImageUrlFromConcept.js:18 ~ conceptId:', conceptId)
   // Retrieve the metadata for the provided concept id and type
   const conceptMetadata = await fetchCmrConcept(conceptId, echoToken)
-  console.log('🚀 ~ file: getImageUrlFromConcept.js:21 ~ conceptMetadata:', conceptMetadata)
+  // Console.log('🚀 ~ file: getImageUrlFromConcept.js:21 ~ conceptMetadata:', conceptMetadata)
 
   if (conceptType === 'granules') {
     // No need to use `await` because we're returning the statement

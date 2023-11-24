@@ -26,6 +26,7 @@ export const getSystemToken = async () => {
     token,
     created_at: createdAt
   } = systemTokenRecord || {}
+  console.log('🚀 ~ file: getSystemToken.js:29 ~ getSystemToken ~ systemTokenRecord:', systemTokenRecord)
 
   // If no system token exists, or the token is older than a day, fetch a few token
   // Tokens last longer than a day, but retrieving a new token every day ensures it doesn't expire and

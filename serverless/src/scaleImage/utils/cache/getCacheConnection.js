@@ -14,7 +14,6 @@ export const getCacheConnection = () => {
   let host = process.env.cacheHost
   let port = process.env.cachePort
 
-  console.log('🚀 ~ file: getCacheConnection.js:19 ~ getCacheConnection ~ process.env.IS_OFFLINE:', process.env.IS_OFFLINE)
   if (process.env.IS_OFFLINE === 'true') {
     host = 'localhost'
     port = '6379'

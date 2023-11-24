@@ -1,4 +1,5 @@
 // Import AWS from 'aws-sdk'
+import { getApplicationConfig } from '../../../sharedUtils/config'
 
 import { buildResponse } from './utils/buildResponse'
 import { downloadImageFromSource } from './utils/downloadImageFromSource'
@@ -21,7 +22,7 @@ import { resizeImage } from './utils/sharp/resizeImage'
 // let parameterStore
 let systemToken
 // Retrieve a connection to the database
-// systemToken = await getSystemToken()
+// eslint-disable-next-line prefer-const
 
 // Initialize the token used to retrieve CMR data
 /**
@@ -30,7 +31,10 @@ let systemToken
  * @param {Object} context AWS Lambda Context
  */
 const scaleImage = async (event, context) => {
-  console.log('🚀 ~ file: handler.js:28 ~ scaleImage ~ event:', event)
+  // TODO fix this stub in place for the token
+  // systemToken = await getSystemToken()
+  console.log('🚀 ~ file: handler.js:34 ~ scaleImage ~ systemToken:', systemToken)
+
   // https://stackoverflow.com/questions/49347210/why-aws-lambda-keeps-timing-out-when-using-knex-js
   // eslint-disable-next-line no-param-reassign
   context.callbackWaitsForEmptyEventLoop = false
@@ -66,14 +70,14 @@ const scaleImage = async (event, context) => {
   } = pathParameters
 
   // Default the queryStringParameters because when none are provided the key is missing
+  // todo default the height and the weight
   const {
     cascade_concepts: cascadeConcepts = 'true',
-    h: height,
-    w: width,
+    h: height = getApplicationConfig().thumbnailSize.height,
+    w: width = getApplicationConfig().thumbnailSize.width,
     return_default: returnDefault = 'true'
   } = queryStringParameters || {}
 
-  console.log('🚀 ~ file: handler.js:71 ~ scaleImage ~ cascade_concepts:', cascadeConcepts)
   // Initialize the thumbnail to an empty array buffer to support `return_default` being set to false
   let thumbnail = Buffer.from('')
 
