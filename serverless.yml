@@ -44,6 +44,13 @@ provider:
 
     NODE_OPTIONS: '--enable-source-maps'
 
+    # Redis configuration
+    # cacheHost:
+    #   Fn::ImportValue: ${self:provider.stage}-VisualizeElastiCacheEndpoint
+    # cachePort:
+    #   Fn::ImportValue: ${self:provider.stage}-VisualizeElastiCachePort
+    cacheKeyExpireSeconds: ${self:custom.variables.cacheKeyExpireSeconds}
+
   vpc:
     securityGroupIds:
       - Fn::ImportValue: ${self:provider.stage}-LambdaSecurityGroup
@@ -123,6 +130,7 @@ custom:
 
   variables:
     # Default values for environment variables used to set environment variables
+    cacheKeyExpireSeconds: ${env:CACHE_KEY_EXPIRE_SECONDS, '84000'}
     obfuscationSpin: ${env:OBFUSCATION_SPIN, ''}
     obfuscationSpinShapefiles: ${env:OBFUSCATION_SPIN_SHAPEFILES, ''}
     orderDelaySeconds: ${env:ORDER_DELAY_SECONDS, '1'}
