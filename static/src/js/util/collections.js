@@ -87,6 +87,12 @@ export const prepareCollectionParams = (state) => {
 
   const { query: portalQuery = {} } = portal
   const { consortium: portalConsortium = [] } = portalQuery
+  const { dataCenter: portalDataCenter } = portalQuery
+
+  // TODO: Improve or rewrite this comment CMR requires the keyword parameter passed so that the facets in organization are subset correctly
+  if (portalDataCenter) {
+    portalQuery.keyword = portalDataCenter
+  }
 
   const collectionParams = {
     authToken,
