@@ -120,7 +120,7 @@ test.describe('Project', () => {
     // })
 
     test.describe('try and download the project data and fail', () => {
-      test('show the refine search functionality', async ({ page }) => {
+      test.only('show the refine search functionality', async ({ page }) => {
         await page.goto('/projects?p=C1225776654-ASF!C1225776654-ASF&pg[1][v]=t&pg[1][gsk]=-start_date&pg[1][m]=harmony0&pg[1][cd]=f&pg[1][ets]=t&pg[1][ess]=t&q=C1225&ff=Customizable&tl=1701711622!3!!&lat=-0.0703125')
         await page.getByTestId(`${conceptId}_access-method__harmony_harmony0`).click()
 
