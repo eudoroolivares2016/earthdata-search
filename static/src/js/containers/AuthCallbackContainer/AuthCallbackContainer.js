@@ -4,6 +4,7 @@ import { set } from 'tiny-cookie'
 import { connect } from 'react-redux'
 import { parse } from 'qs'
 
+import { getEnvironmentConfig } from '../../../../../sharedUtils/config'
 import { locationPropType } from '../../util/propTypes/location'
 import history from '../../util/history'
 
@@ -28,6 +29,8 @@ export const AuthCallbackContainer = ({
   location,
   onAddEarthdataDownloadRedirect
 }) => {
+  const { edscHost } = getEnvironmentConfig()
+
   useEffect(() => {
     const { search } = location
 
@@ -39,42 +42,40 @@ export const AuthCallbackContainer = ({
       redirect = '/'
     } = params
 
-    // Verify that the redirect params are real URLs
-    try {
-      let redirectUrl
-      if (eddRedirect) redirectUrl = new URL(eddRedirect)
-      if (redirect && redirect !== '/') redirectUrl = new URL(redirect)
+    let eddRedirectUrl = eddRedirect
+    if (redirect.includes('earthdata-download')) {
+      eddRedirectUrl = redirect
+    }
 
-      if (
-        redirectUrl
-        && redirectUrl.protocol !== 'http:'
-        && redirectUrl.protocol !== 'https:'
-        && redirectUrl.protocol !== 'earthdata-download:'
-      ) {
-        // The redirectUrl is not a valid protocol
-        console.log('The redirectUrl is not a valid protocol')
-        window.location.replace('/')
+    // Handle EDD redirects
+    if (eddRedirectUrl) {
+      const validEddRedirect = eddRedirectUrl.startsWith('earthdata-download')
+      if (validEddRedirect) {
+        if (accessToken) eddRedirectUrl += `&token=${accessToken}`
+
+        // Add the redirect information to the store
+        onAddEarthdataDownloadRedirect({
+          redirect: eddRedirectUrl
+        })
+
+        // Redirect to the edd callback
+        history.push('/earthdata-download-callback')
 
         return
       }
-    } catch (error) {
+
       window.location.replace('/')
 
       return
     }
 
-    // If the redirect includes earthdata-download, redirect to the edd callback
-    if (eddRedirect || redirect.includes('earthdata-download')) {
-      let eddRedirectUrl = eddRedirect || redirect
-      if (accessToken) eddRedirectUrl += `&token=${accessToken}`
+    // Handle redirects
+    const invalidRedirectUrl = redirect !== '/' && !redirect.startsWith(edscHost)
 
-      // Add the redirect information to the store
-      onAddEarthdataDownloadRedirect({
-        redirect: eddRedirectUrl
-      })
-
-      // Redirect to the edd callback
-      history.push('/earthdata-download-callback')
+    if (invalidRedirectUrl) {
+      // Redirect to an error page or a safe location if the URL is not a relative path
+      // https://developer.mozilla.org/en-US/docs/Web/API/Location/replace assign prevents back-button use in history
+      window.location.replace('/')
 
       return
     }
