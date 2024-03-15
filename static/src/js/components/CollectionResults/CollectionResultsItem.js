@@ -108,7 +108,6 @@ export const CollectionResultsItem = forwardRef(({
   // Explicity call the GET request for the lambda
   // TODO there are some collections which it seems have inaccessible collections
   useEffect(() => {
-    console.log('getting into useEffect ✅')
     if (!isDefaultImage) {
       axios.get(thumbnail)
         .then((response) => {
@@ -117,7 +116,8 @@ export const CollectionResultsItem = forwardRef(({
           setBase64Image(response.data.base64Image)
           onThumbnailLoaded()
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('🚀 ~ file: CollectionResultsItem.js:120 ~ useEffect ~ err:', err)
           // TODO should we print an error message here?
           setBase64Image(unavailableImg)
           onThumbnailLoaded()
