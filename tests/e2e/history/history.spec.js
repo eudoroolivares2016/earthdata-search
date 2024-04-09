@@ -82,7 +82,7 @@ test.describe('History', () => {
 
       await page.getByTestId('granule-results-actions__download-all-button').click()
 
-      await expect(page.getByTestId('project-download-data')).toBeVisible()
+      await expect(page.getByTestId('project-download-data')).not.toBeVisible()
 
       await page.goBack()
     })
