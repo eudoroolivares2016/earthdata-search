@@ -1422,8 +1422,6 @@ test.describe('Map interactions', () => {
         await page.goto(`search/granules?p=${conceptId}&pg[0][v]=f&pg[0][gsk]=-start_date&q=${conceptId}&polygon[0]=42.1875,-2.40647,42.1875,-9.43582,49.21875,-9.43582,42.1875,-2.40647&tl=1622520000!3!!`)
       })
 
-      // TODO find a way to verify the granules are drawn on the map
-
       test.describe('When hovering over a granule', () => {
         test('highlights the granule in the granule results list', async ({ page }) => {
           await page.locator('.map').hover({
