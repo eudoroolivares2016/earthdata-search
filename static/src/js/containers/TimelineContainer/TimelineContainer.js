@@ -31,6 +31,7 @@ export const mapStateToProps = (state) => ({
   collectionsMetadata: getCollectionsMetadata(state),
   focusedCollectionId: getFocusedCollectionId(state),
   pathname: state.router.location.pathname,
+  search: state.router.location.search,
   projectCollectionsIds: getProjectCollectionsIds(state),
   temporalSearch: state.query.collection.temporal,
   timeline: state.timeline,
@@ -51,12 +52,19 @@ export const TimelineContainer = (props) => {
     onToggleOverrideTemporalModal,
     onMetricsTimeline,
     onToggleTimeline,
-    isOpen
+    isOpen,
+    search: searchLocation
   } = props
+  console.log('🚀 ~ file: TimelineContainer.js:58 ~ TimelineContainer ~ location:', searchLocation)
 
   // Determine the collectionMetadata the timeline should be displaying
-  const isProjectPage = isPath(pathname, ['/projects'])
+  // TODO the timeline shouldn't be showing on the saved projects page but, it can't tell after this is mounted that its there
+  console.log('🚀 ~ file: TimelineContainer.js:60 ~ TimelineContainer ~ pathname:', pathname)
+  // Ensure that timeline does not appear on the `Saved Projects page
+  const isProjectPage = isPath(pathname, ['/projects']) && (searchLocation.length > 0)
+  console.log('🚀 ~ file: TimelineContainer.js:65 ~ TimelineContainer ~ isProjectPage:', isProjectPage)
   const isGranulesPage = isPath(pathname, ['/search/granules'])
+  console.log('🚀 ~ file: TimelineContainer.js:68 ~ TimelineContainer ~ projectCollectionsIds:', projectCollectionsIds)
 
   const collectionMetadata = {}
   const collectionsToRender = []
@@ -112,7 +120,8 @@ TimelineContainer.propTypes = {
   projectCollectionsIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   temporalSearch: PropTypes.shape({}),
   timeline: PropTypes.shape({}).isRequired,
-  isOpen: PropTypes.bool.isRequired
+  isOpen: PropTypes.bool.isRequired,
+  search: PropTypes.string.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimelineContainer)
