@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { test, expect } from 'playwright-test-coverage'
 
 import singleCollection from './__mocks__/single_collection.json'
@@ -25,9 +26,10 @@ test.describe('Performance Benchmarking', () => {
       const lcpEntry = perfEntries[perfEntries.length - 1]
 
       // Return LCP value
-      return lcpEntry.renderTime
+      console.log('🚀 ~ file: performance.spec.js:30 ~ lcpValue ~ lcpEntry:', lcpEntry)
+
+      return lcpEntry
     })
-    console.log('🚀 ~ file: performance.spec.js:30 ~ lcpValue ~ lcpValue:', lcpValue)
 
     // Const requestFinishedPromise = page.waitForEvent('requestfinished')
 
