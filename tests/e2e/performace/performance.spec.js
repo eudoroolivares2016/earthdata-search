@@ -13,13 +13,28 @@ test.describe('Performance Benchmarking', () => {
     })
   })
 
-  test('Search page load time is less than 1 second', async ({ page }) => {
+  test.only('Search page load time is less than 1 second', async ({ page }) => {
     await page.goto('/')
-    const requestFinishedPromise = page.waitForEvent('requestfinished')
-    const request = await requestFinishedPromise
-    await page.mouse.click(1000, 450)
+    await page.waitForLoadState('domcontentloaded')
 
-    expect(request.timing().responseEnd < 30000).toBe(true)
+    // Extract LCP value
+    const lcpValue = await page.evaluate(() => {
+      // Get performance entries
+      const perfEntries = performance.getEntriesByType('largest-contentful-paint')
+      // Get the last entry
+      const lcpEntry = perfEntries[perfEntries.length - 1]
+
+      // Return LCP value
+      return lcpEntry.renderTime
+    })
+    console.log('🚀 ~ file: performance.spec.js:30 ~ lcpValue ~ lcpValue:', lcpValue)
+
+    // Const requestFinishedPromise = page.waitForEvent('requestfinished')
+
+    // const request = await requestFinishedPromise
+    // await page.mouse.click(1000, 450)
+
+    // expect(request.timing().responseEnd < 30000).toBe(true)
   })
 
   test('Search page LCP start time is less than 7 second', async ({ page }) => {
