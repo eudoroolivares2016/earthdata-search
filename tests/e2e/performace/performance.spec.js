@@ -13,7 +13,7 @@ test.describe('Performance Benchmarking', () => {
     })
   })
 
-  test('Search page load time is less than 1 second', async ({ page }) => {
+  test.only('Search page load time is less than 1 second', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('domcontentloaded')
 
@@ -37,20 +37,20 @@ test.describe('Performance Benchmarking', () => {
     // expect(request.timing().responseEnd < 30000).toBe(true)
   })
 
-  // Test('Search page LCP start time is less than 7 second', async ({ page }) => {
-  //   await page.goto('/')
-  //   await page.mouse.click(1000, 450)
-  //   const LCP = await page.evaluate(() => new Promise((resolve) => {
-  //     new PerformanceObserver((list) => {
-  //       const entries = list.getEntries()
-  //       const lcp = entries.at(-1)
-  //       resolve(lcp.startTime)
-  //     }).observe({
-  //       type: 'largest-contentful-paint',
-  //       buffered: true
-  //     })
-  //   }))
+  test('Search page LCP start time is less than 7 second', async ({ page }) => {
+    await page.goto('/')
+    await page.mouse.click(1000, 450)
+    const LCP = await page.evaluate(() => new Promise((resolve) => {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries()
+        const lcp = entries.at(-1)
+        resolve(lcp.startTime)
+      }).observe({
+        type: 'largest-contentful-paint',
+        buffered: true
+      })
+    }))
 
-  //   expect(LCP < 30000).toBe(true)
-  // })
+    expect(LCP < 30000).toBe(true)
+  })
 })
