@@ -18,19 +18,34 @@ test.describe('Performance Benchmarking', () => {
     await page.goto('/')
     await page.waitForLoadState('domcontentloaded')
 
-    // Extract LCP value
-    const lcpValue = await page.evaluate(() => {
-      // Get performance entries
-      const perfEntries = performance.getEntriesByType('largest-contentful-paint')
-      // Get the last entry
-      const lcpEntry = perfEntries[perfEntries.length - 1]
+    // // Extract LCP value
+    // const lcpValue = await page.evaluate(() => {
+    //   // Get performance entries
+    //   const perfEntries = performance.getEntriesByType('largest-contentful-paint')
+    //   console.log('🚀 ~ file: performance.spec.js:25 ~ lcpValue ~ perfEntries:', perfEntries)
+    //   // Get the last entry
+    //   const lcpEntry = perfEntries[perfEntries.length - 1]
 
-      // Return LCP value
-      console.log('🚀 ~ file: performance.spec.js:30 ~ lcpValue ~ lcpEntry:', lcpEntry)
+    //   // Return LCP value
+    //   console.log('🚀 ~ file: performance.spec.js:30 ~ lcpValue ~ lcpEntry:', lcpEntry)
 
-      return lcpEntry
-    })
+    //   return lcpEntry
+    // })
 
+    const lcp = await page.evaluate(async () => new Promise((resolve) => {
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries()
+        resolve(entries[entries.length - 1])
+      }).observe({
+        type: 'largest-contentful-paint',
+        buffered: true
+      })
+    }))
+
+    if (lcp) {
+      // Adjust threshold as needed
+      expect(lcp.startTime).toBeLessThan(30000)
+    }
     // Const requestFinishedPromise = page.waitForEvent('requestfinished')
 
     // const request = await requestFinishedPromise
