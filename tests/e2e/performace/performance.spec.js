@@ -17,12 +17,14 @@ test.describe('Performance Benchmarking', () => {
     await page.goto('/')
     const requestFinishedPromise = page.waitForEvent('requestfinished')
     const request = await requestFinishedPromise
+    await page.mouse.click(1000, 450)
 
     expect(request.timing().responseEnd < 30000).toBe(true)
   })
 
   test('Search page LCP start time is less than 7 second', async ({ page }) => {
     await page.goto('/')
+    await page.mouse.click(1000, 450)
     const LCP = await page.evaluate(() => new Promise((resolve) => {
       new PerformanceObserver((list) => {
         const entries = list.getEntries()
