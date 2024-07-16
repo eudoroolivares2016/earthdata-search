@@ -29,8 +29,12 @@ export class SpatialSelectionDropdown extends PureComponent {
 
   onItemClick(item) {
     const {
-      onToggleShapefileUploadModal
+      onToggleShapefileUploadModal,
+      onMetricsSpatialSelection
     } = this.props
+
+    // Sends metrics for spatial selection usage
+    onMetricsSpatialSelection({ item })
 
     if (item === 'point') {
       eventEmitter.emit('map.drawStart', {
@@ -164,6 +168,7 @@ export class SpatialSelectionDropdown extends PureComponent {
 }
 
 SpatialSelectionDropdown.propTypes = {
+  onMetricsSpatialSelection: PropTypes.func.isRequired,
   onToggleShapefileUploadModal: PropTypes.func.isRequired
 }
 

@@ -21,14 +21,19 @@ export const computeSpatialType = (state) => {
   const { query } = state
   const { collection } = query
   const { spatial } = collection
+  console.log('🚀 ~ file: helpers.js:24 ~ computeSpatialType ~ spatial:', spatial)
   const {
     boundingBox,
+    circle,
     polygon,
     point
   } = spatial
   if (boundingBox) return 'Bounding Box'
+  if (circle) return 'Circle'
   if (polygon) return 'Polygon'
   if (point) return 'Point'
+  console.log('🚀 ~ file: helpers.js:38 ~ computeSpatialType ~ point:', point)
+  console.log('🚀 ~ file: helpers.js:38 ~ computeSpatialType ~ circle:', circle)
 
   return null
 }

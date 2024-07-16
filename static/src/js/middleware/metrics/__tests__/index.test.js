@@ -100,7 +100,7 @@ describe('metrics middleware', () => {
     expect(events.timeline).toHaveBeenCalledWith(action)
   })
 
-  test('calls timeline event', () => {
+  test('calls map event', () => {
     // eslint-disable-next-line no-import-assign
     events.map = jest.fn()
     const { invoke } = createStore()

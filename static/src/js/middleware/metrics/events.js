@@ -11,6 +11,7 @@ const { dataLayer = [] } = window
 
 /**
 * Pushes a virtualPageView event on the dataLayer. Only fires on PUSH events.
+$ These `PUSH` events only fire during page transitions
 * @param {Object} action - The action.
 * @param {Object} state - The current state.
 */
@@ -193,6 +194,24 @@ export const spatialEdit = (action) => {
     spatialEditEventAction: type,
     spatialEditEventLabel: '',
     spatialEditEventValue: Math.round(distanceSum)
+  })
+}
+
+/**
+* Pushes a spatialSelection event on the dataLayer.
+* @param {Object} action - The action.
+*/
+export const spatialSelection = (action) => {
+  const { payload } = action
+  const {
+    item: shapeType
+  } = payload
+  console.log('🚀 ~ file: events.js:209 ~ spatialSelection ~ shapeType:', shapeType)
+
+  dataLayer.push({
+    event: 'spatialSelection',
+    spatialEditEventCategory: 'Spatial Selection',
+    spatialEditEventLabel: shapeType
   })
 }
 
