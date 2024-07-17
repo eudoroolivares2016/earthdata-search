@@ -35,14 +35,13 @@ describe('SpatialSelectionDropdown component', () => {
     const user = userEvent.setup()
 
     setup()
-    // TODO passing an `aria-label` or `aria-labelledby` was not working
-    const dropdownSelectionButton = screen.getByRole('button')
-    // TODO make sure you need the `act`
+
+    const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
     await act(async () => {
       await user.click(dropdownSelectionButton)
     })
 
-    screen.debug()
     expect(screen.getByRole('button', { name: 'Select Polygon' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Select Rectangle' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Select Point' })).toBeInTheDocument()
@@ -56,9 +55,8 @@ describe('SpatialSelectionDropdown component', () => {
 
     setup()
 
-    // TODO passing an `aria-label` or `aria-labelledby` was not working
-    const dropdownSelectionButton = screen.getByRole('button')
-    // TODO make sure you need the `act`
+    const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
     await act(async () => {
       await user.click(dropdownSelectionButton)
     })
@@ -78,9 +76,8 @@ describe('SpatialSelectionDropdown component', () => {
 
     setup()
 
-    // TODO passing an `aria-label` or `aria-labelledby` was not working
-    const dropdownSelectionButton = screen.getByRole('button')
-    // TODO make sure you need the `act`
+    const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
     await act(async () => {
       await user.click(dropdownSelectionButton)
     })
@@ -100,9 +97,8 @@ describe('SpatialSelectionDropdown component', () => {
 
     setup()
 
-    // TODO passing an `aria-label` or `aria-labelledby` was not working
-    const dropdownSelectionButton = screen.getByRole('button')
-    // TODO make sure you need the `act`
+    const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
     await act(async () => {
       await user.click(dropdownSelectionButton)
     })
@@ -122,9 +118,8 @@ describe('SpatialSelectionDropdown component', () => {
 
     setup()
 
-    // TODO passing an `aria-label` or `aria-labelledby` was not working
-    const dropdownSelectionButton = screen.getByRole('button')
-    // TODO make sure you need the `act`
+    const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
     await act(async () => {
       await user.click(dropdownSelectionButton)
     })
@@ -142,10 +137,8 @@ describe('SpatialSelectionDropdown component', () => {
     const user = userEvent.setup()
 
     setup()
+    const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
 
-    // TODO passing an `aria-label` or `aria-labelledby` was not working
-    const dropdownSelectionButton = screen.getByRole('button')
-    // TODO make sure you need the `act`
     await act(async () => {
       await user.click(dropdownSelectionButton)
     })
@@ -169,9 +162,8 @@ describe('SpatialSelectionDropdown component', () => {
 
       setup()
 
-      // TODO passing an `aria-label` or `aria-labelledby` was not working
-      const dropdownSelectionButton = screen.getByRole('button')
-      // TODO make sure you need the `act`
+      const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
       await act(async () => {
         await user.click(dropdownSelectionButton)
       })
@@ -184,7 +176,6 @@ describe('SpatialSelectionDropdown component', () => {
       expect(onMetricsSpatialSelection).toHaveBeenCalledTimes(0)
     })
 
-    // TODO should work tried, waitFor, act, and a few others
     test('hovering over the shapefile reveals tool-tip', async () => {
       jest.spyOn(getApplicationConfig, 'getApplicationConfig').mockImplementation(() => ({
         disableDatabaseComponents: 'true'
@@ -193,9 +184,8 @@ describe('SpatialSelectionDropdown component', () => {
       const user = userEvent.setup()
       setup()
 
-      // TODO passing an `aria-label` or `aria-labelledby` was not working
-      const dropdownSelectionButton = screen.getByRole('button')
-      // TODO make sure you need the `act`
+      const dropdownSelectionButton = screen.getByRole('button', { name: 'spatial-selection-dropdown' })
+
       await act(async () => {
         await user.click(dropdownSelectionButton)
       })

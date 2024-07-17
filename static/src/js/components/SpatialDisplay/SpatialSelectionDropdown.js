@@ -75,11 +75,11 @@ const SpatialSelectionDropdown = (props) => {
   return (
     <Dropdown
       className="spatial-selection-dropdown"
-      data-testid="spatial-selection-dropdown"
     >
       <Dropdown.Toggle
         variant="inline-block"
         id="spatial-selection-dropdown"
+        aria-label="spatial-selection-dropdown"
         className="search-form__button search-form__button--dark"
       >
         <EDSCIcon className="spatial-selection-dropdown__icon button__icon" icon={FaCrop} size="0.825rem" />
@@ -87,7 +87,6 @@ const SpatialSelectionDropdown = (props) => {
       <Dropdown.Menu className="spatial-selection-dropdown__menu">
         <Dropdown.Item
           className="spatial-selection-dropdown__button"
-          data-testid="spatial-selection__polygon"
           as={Button}
           icon="edsc-icon-poly-open edsc-icon-fw"
           onClick={() => onItemClick('polygon')}
@@ -97,7 +96,6 @@ const SpatialSelectionDropdown = (props) => {
         </Dropdown.Item>
         <Dropdown.Item
           className="spatial-selection-dropdown__button"
-          data-testid="spatial-selection__rectangle"
           as={Button}
           icon="edsc-icon-rect-open edsc-icon-fw"
           onClick={() => onItemClick('rectangle')}
@@ -107,7 +105,6 @@ const SpatialSelectionDropdown = (props) => {
         </Dropdown.Item>
         <Dropdown.Item
           className="spatial-selection-dropdown__button"
-          data-testid="spatial-selection__point"
           as={Button}
           icon={FaMapMarker}
           onClick={() => onItemClick('point')}
@@ -117,7 +114,6 @@ const SpatialSelectionDropdown = (props) => {
         </Dropdown.Item>
         <Dropdown.Item
           className="spatial-selection-dropdown__button"
-          data-testid="spatial-selection__circle"
           as={Button}
           icon={FaCircle}
           onClick={() => onItemClick('circle')}
@@ -127,7 +123,6 @@ const SpatialSelectionDropdown = (props) => {
         </Dropdown.Item>
         <Dropdown.Item
           className="spatial-selection-dropdown__button"
-          data-testid="spatial-selection__shapefile"
           as={Button}
           icon={FaFile}
           onClick={() => onItemClick('file')}

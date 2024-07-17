@@ -179,6 +179,7 @@ export const map = (action) => {
 
 /**
 * Pushes a spatialEdit event on the dataLayer.
+* This event is fired when on the leaflet edit control we edit shapes on the map
 * @param {Object} action - The action.
 */
 export const spatialEdit = (action) => {
