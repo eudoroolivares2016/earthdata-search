@@ -48,6 +48,6 @@ describe('mapDispatchToProps', () => {
 describe('SpatialSelectionDropdownContainer component', () => {
   test('passes its props and renders a single SpatialSelectionDropdown component', () => {
     setup()
-    expect(screen.getByTestId('spatial-selection-dropdown')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'spatial-selection-dropdown' })).toBeInTheDocument()
   })
 })
