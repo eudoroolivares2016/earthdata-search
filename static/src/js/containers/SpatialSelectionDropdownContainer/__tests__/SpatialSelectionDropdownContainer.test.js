@@ -13,7 +13,8 @@ Enzyme.configure({ adapter: new Adapter() })
 
 function setup() {
   const props = {
-    onToggleShapefileUploadModal: jest.fn()
+    onToggleShapefileUploadModal: jest.fn(),
+    onMetricsSpatialSelection: jest.fn()
   }
 
   const enzymeWrapper = shallow(<SpatialSelectionDropdownContainer {...props} />)
