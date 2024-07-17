@@ -210,8 +210,8 @@ export const spatialSelection = (action) => {
 
   dataLayer.push({
     event: 'spatialSelection',
-    spatialEditEventCategory: 'Spatial Selection',
-    spatialEditEventLabel: shapeType
+    spatialSelectionCategory: 'Spatial Selection',
+    spatialSelectionEventLabel: shapeType
   })
 }
 
