@@ -80,6 +80,7 @@ const SpatialSelectionDropdown = (props) => {
         variant="inline-block"
         id="spatial-selection-dropdown"
         aria-label="spatial-selection-dropdown"
+        data-testid="spatial-selection-dropdown"
         className="search-form__button search-form__button--dark"
       >
         <EDSCIcon className="spatial-selection-dropdown__icon button__icon" icon={FaCrop} size="0.825rem" />

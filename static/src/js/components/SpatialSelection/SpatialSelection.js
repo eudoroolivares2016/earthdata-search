@@ -475,7 +475,7 @@ const SpatialSelection = (props) => {
   const onEditStop = () => {
     const { onMetricsSpatialEdit } = props
     const postEditBounds = layers.current.map((layer) => boundsToPoints(layer))
-
+    // TODO: One of theseForEach is throwing an error
     preEditBounds.forEach((bounds, index) => {
       const { type: layerType } = layers.current[index]
       let distanceSum = 0
