@@ -207,7 +207,6 @@ export const spatialSelection = (action) => {
   const {
     item: shapeType
   } = payload
-  console.log('🚀 ~ file: events.js:209 ~ spatialSelection ~ shapeType:', shapeType)
 
   dataLayer.push({
     event: 'spatialSelection',

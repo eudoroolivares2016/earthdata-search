@@ -98,16 +98,10 @@ const SpatialSelection = (props) => {
   const drawnLayers = useRef([])
   const drawControl = useRef(null)
   const [preEditBounds, setPreEditBounds] = useState(null)
-  const [callbackSetup, setCallbackSetup] = useState(false)
   const featureGroupRef = useRef(null)
   // https://stackoverflow.com/questions/57847594/accessing-up-to-date-state-from-within-a-callback/62453660#62453660
-  const stateRef = useRef()
-  stateRef.current = preEditBounds
-
-  function setupConsoleCallback(callback) {
-    console.log('Setting up callback')
-    setInterval(callback, 3000)
-  }
+  const stateRefPreEditBounds = useRef()
+  stateRefPreEditBounds.current = preEditBounds
 
   const {
     advancedSearch: propsAdvancedSearch = {},
@@ -153,11 +147,6 @@ const SpatialSelection = (props) => {
     polygonSearch.current = propsPolygonSearch
   }, [propsPolygonSearch])
 
-  useEffect(() => {
-    console.log('value changed by not updating here ✅')
-    console.log('🚀 ~ file: SpatialSelection.js:150 ~ SpatialSelection ~ preEditBounds:', preEditBounds)
-  }, [preEditBounds])
-
   const setLayer = (layer, shouldCenter, isShapefile) => {
     if (isShapefile) {
       layers.current = [...layers.current, layer]
@@ -171,7 +160,6 @@ const SpatialSelection = (props) => {
   }
 
   const boundsToPoints = (layer) => {
-    console.log('🚀 ~ file: SpatialSelection.js:160 ~ boundsToPoints ~ layer:', layer)
     let bounds = []
 
     if (['circle', 'marker'].indexOf(layer.type) > -1) {
@@ -182,10 +170,7 @@ const SpatialSelection = (props) => {
       ([bounds] = layer.getLatLngs())
     }
 
-    const latLongNormalized = bounds.map((latLng) => map.latLngToLayerPoint(latLng))
-    console.log('🚀 ~ file: SpatialSelection.js:172 ~ boundsToPoints ~ latLongNormalized:', latLongNormalized)
-
-    return latLongNormalized
+    return bounds.map((latLng) => map.latLngToLayerPoint(latLng))
   }
 
   // Return the matching spatial search for the given type
@@ -485,42 +470,22 @@ const SpatialSelection = (props) => {
   }
 
   // Callback from EditControl, called when clicking the edit button
-  // TODO we need to trigger a re-render here because right now we assume the state update happens immediately
   const onEditStart = () => {
-    console.log('Calling onEdit start ✅')
     const editBounds = layers.current.map((layer) => boundsToPoints(layer))
-    console.log('🚀 ~ file: SpatialSelection.js:477 ~ onEditStart ~ editBounds:', editBounds)
     setPreEditBounds(editBounds)
-    if (!callbackSetup) {
-      setupConsoleCallback(() => { console.log(`Count is: ${stateRef.current}`) })
-      setCallbackSetup(true)
-    }
   }
 
   // Callback from EditControl, called when clicking the save button
-  // TODO
   const onEditStop = () => {
     const { onMetricsSpatialEdit } = props
     const postEditBounds = layers.current.map((layer) => boundsToPoints(layer))
-    console.log('🚀 ~ file: SpatialSelection.js:478 ~ onEditStop ~ postEditBounds:', postEditBounds)
-    console.log('🚀 ~ file: SpatialSelection.js:501 ~ preEditBounds.forEach ~ preEditBounds:', preEditBounds)
 
-    // TODO: One of theseForEach is throwing an error
-    // Iterate over the `preEditBounds` and get the difference between that and the `postEditBounds`
-    // TODO this `preEditBounds` is null as if the state is not getting updated its just the initial state
-    console.log('🚀 ~ file: SpatialSelection.js:521 ~ stateRef.forEach ~ stateRef:', stateRef)
-    console.log('🚀 ~ file: SpatialSelection.js:532 ~ stateRef.current.forEach ~ stateRef.current:', stateRef.current)
-
-    stateRef.current.forEach((bounds, index) => {
-      console.log('🚀 ~ file: SpatialSelection.js:481 ~ preEditBounds.forEach ~ index:', index)
-      console.log('🚀 ~ file: SpatialSelection.js:480 ~ preEditBounds.forEach ~ bounds:', bounds)
-
+    // Iterate over the `stateRefPreEditBounds` and get the difference between that and the `postEditBounds`
+    stateRefPreEditBounds.current.forEach((bounds, index) => {
       const { type: layerType } = layers.current[index]
       let distanceSum = 0
 
       bounds.forEach((initialPoint, i) => {
-        console.log('🚀 ~ file: SpatialSelection.js:486 ~ bounds.forEach ~ point:', initialPoint)
-        // TODO: get the distance
         const updatedPoint = postEditBounds[index][i]
         distanceSum += initialPoint.distanceTo(updatedPoint)
       })
