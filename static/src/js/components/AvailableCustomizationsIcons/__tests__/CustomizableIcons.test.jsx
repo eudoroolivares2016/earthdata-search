@@ -24,6 +24,14 @@ describe('AvailableCustomizationsIcons component', () => {
   test('on load should contain all of the custom icons for the customizable options', () => {
     setup()
 
+    // Ensure that when not using the `forAccessMethodRadio`, use `metaIconClasses`
+    const metaIconContainer = screen.getByTestId('meta-icon')
+    expect(metaIconContainer).toHaveClass(
+      'meta-icon',
+      'collection-results-item__meta-icon',
+      'collection-results-item__meta-icon--customizable'
+    )
+
     // Ensure that each of the icons rendered
     expect(screen.getByTitle('A white globe icon')).toBeInTheDocument()
     expect(screen.getByTitle('A white clock icon')).toBeInTheDocument()
@@ -39,6 +47,14 @@ describe('AvailableCustomizationsIcons component', () => {
         hasVariables: false,
         hasCombine: false
       })
+
+      // Ensure that when not using the `forAccessMethodRadio` use `metaIconClasses`
+      const metaIconContainer = screen.getByTestId('meta-icon')
+      expect(metaIconContainer).toHaveClass(
+        'meta-icon',
+        'collection-results-item__meta-icon',
+        'collection-results-item__meta-icon--customizable'
+      )
 
       // Ensure that each of the icons that are supposed to render do
       expect(screen.getByTitle('A white globe icon')).toBeInTheDocument()
