@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import CustomizableIcons from '../CustomizableIcons'
+
+import AvailableCustomizationsIcons from '../AvailableCustomizationsIcons'
 
 const setup = (overrideProps) => {
   const props = {
@@ -15,21 +16,13 @@ const setup = (overrideProps) => {
   }
 
   return render(
-    <CustomizableIcons {...props} />
+    <AvailableCustomizationsIcons {...props} />
   )
 }
 
-describe('CustomizableIcons component', () => {
+describe('AvailableCustomizationsIcons component', () => {
   test('on load should contain all of the custom icons for the customizable options', () => {
     setup()
-
-    // Ensure that when not using the `forAccessMethodRadio`, use `metaIconClasses`
-    const metaIconContainer = screen.getByTestId('meta-icon')
-    expect(metaIconContainer).toHaveClass(
-      'meta-icon',
-      'collection-results-item__meta-icon',
-      'collection-results-item__meta-icon--customizable'
-    )
 
     // Ensure that each of the icons rendered
     expect(screen.getByTitle('A white globe icon')).toBeInTheDocument()
@@ -40,34 +33,12 @@ describe('CustomizableIcons component', () => {
     expect(screen.getByTitle('A white cubes icon')).toBeInTheDocument()
   })
 
-  describe('if the customizableIcon is for the access method radio', () => {
-    test('the class name should include the access method class', () => {
-      setup({ forAccessMethodRadio: true })
-
-      const metaIconContainer = screen.getByTestId('meta-icon')
-      expect(metaIconContainer).toHaveClass(
-        'meta-icon',
-        'collection-results-item__meta-icon',
-        'collection-results-item__meta-icon--customizable',
-        'meta-icon__accessMethod'
-      )
-    })
-  })
-
-  describe('if some of the conditionals are false', () => {
+  describe('when some of the dat customizations are not supported', () => {
     test('those icons do not render', () => {
       setup({
         hasVariables: false,
         hasCombine: false
       })
-
-      // Ensure that when not using the `forAccessMethodRadio` use `metaIconClasses`
-      const metaIconContainer = screen.getByTestId('meta-icon')
-      expect(metaIconContainer).toHaveClass(
-        'meta-icon',
-        'collection-results-item__meta-icon',
-        'collection-results-item__meta-icon--customizable'
-      )
 
       // Ensure that each of the icons that are supposed to render do
       expect(screen.getByTitle('A white globe icon')).toBeInTheDocument()
